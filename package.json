@@ -1,0 +1,32 @@
+{
+    "name": "randap",
+    "version": "1.0.0",
+    "main": "sever.js",
+    "scripts": {
+        "client-install": "npm install --prefix cilent",
+        "start": "node sever",
+        "sever": "nodemon sever",
+        "client": "npm run dev --prefix frontend",
+        "dev": "concurrently \"npm run sever\" \"npm run client\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "date-fns": "^3.6.0",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.4.0",
+        "reactstrap": "^9.2.2",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2",
+        "nodemon": "^3.1.0"
+    }
+}
