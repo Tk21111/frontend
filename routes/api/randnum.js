@@ -6,16 +6,15 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 router.route('/')
     .get(randnumController.getrand)
-    .put(randnumController.setrand)
+
+router.route('/get')
+    .get(randnumController.setrand)
 
 router.route('/all')
     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), randnumController.getAll);
 
 router.route('/check')
     .get(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), randnumController.checkDupilcate);
-
-router.route('/givingByWho')
-    .get(randnumController.getWho);
 
 router.route('/giveBy')
     .get(randnumController.giveBy);

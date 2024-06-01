@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const Hauth = async(req, res) => {
     const { user, pwd} = req.body;
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required ' });
-
     const found = await User.findOne({ username: user }).exec();
     if (!found) return res.sendStatus(401); //unauthorized
     const match = await bcrypt.compare(pwd, found.password);
@@ -29,14 +28,14 @@ const Hauth = async(req, res) => {
 
         res.cookie('jwt', refreshToken, {
             httpOnly: true,
-            //secure: true,
+            secure: false,
             sameSite: 'None',
             maxAge: 24 * 60 * 60 * 1000
         });
 
-        res.json({ roles, accessToken });
+        res.status(200).json({ accessToken });
     } else {
-        console('!match')
+        console.log('!match')
         res.sendStatus(401);
     }
 }

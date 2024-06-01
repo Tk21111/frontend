@@ -45,22 +45,20 @@ async function generateUniqueRandomNumber(foundUser) {
 }
 
 const getrand = async(req, res) => {
-    const cookie = req.cookies;
-    if (!cookie.jwt) return res.status(401).json({ 'message': 'cookie is not found ' });
+    const username = req.user
+    if (!username) return res.status(401).json({ 'message': 'cookie is not found' });
 
-    const refreshToken = cookie.jwt;
-    const foundUser = await User.findOne({ refreshToken }).exec();
+    const foundUser = await User.findOne({ username }).exec();
 
     if (!foundUser?.randnum) return res.status(403).json({'message' : 'either u dont have generated number yet or u some how get in to this page'});
     const result = foundUser.randnum;
     res.json(result);
 }
 const setrand = async(req, res) => {
-    const cookie = req.cookies;
-    if (!cookie.jwt) return res.status(401).json({ 'message': 'cookie is not found ' });
+    const username = req.user;
+    if (!username) return res.status(401).json({ 'message': 'cookie is not found ' });
 
-    const refreshToken = cookie.jwt;
-    const foundUser = await User.findOne({ refreshToken }).exec();
+    const foundUser = await User.findOne({ username }).exec();
 
     if (foundUser.randnum) {
         return res.status(403).json({ 'message': 'already have number' });
@@ -81,6 +79,7 @@ const setrand = async(req, res) => {
 }
 
 const getAll = async(req, res) => {
+    console.log(req)
     const userAll = await User.find();
     if (!userAll) return res.status(204).json({ 'message': 'User not found' });
     res.json(userAll);
@@ -103,32 +102,17 @@ const checkDupilcate = async(req, res) => {
     if (userAll.length !== duplicates.length && duplicates.length !== 0) {
         dull = true
     }
-    //res.json(userAll + dull)
     res.json(userAll + "     " + "duplicate: " + dull);
-}
-
-const getWho = async(req , res) =>{
-    
-    const cookie = req.cookies;
-    if (!cookie.jwt) return res.status(401).json({ 'message': 'cookie is not found ' });
-
-    const refreshToken = cookie.jwt;
-    const foundUser = await User.findOne({ refreshToken }).exec();
-    const userGivenBy = User.findOne({no : foundUser.randnum}).exec()
-
-    if (!foundUser || !userGivenBy) return res.status(401).json({'message' : 'your cookie or there is no gift for you contract me now'})
-    res.json(`U will be giving a gift from ${userGivenBy}`);
 }
 const giveBy = async (req,res)=>{
     const User = require('../model/User');
-    const cookie = req.cookies;
-    if(!cookie) return res.status(404).send('No cookie');
-    const refresh = cookie.jwt;
-    const found = await User.findOne({refreshToken : refresh}).exec();
+    const username = req.user;
+    if(!username) return res.status(403).send('No cookie');
+    const found = await User.findOne({username : username}).exec();
     if(!found) return res.status(401).send('Unauthorized');
     const foundNo = found.no;
     const match = await User.findOne({randnum : foundNo}).exec();
     if(!match) return res.status(404).send('Not found contract me');
-    res.status(404).json({'message' : 'number of your giver is ' + match.no + 'and his/her/its/them/our etc. username is ' +match.username });
+    res.json(match);
     }
-module.exports = { getrand, setrand, getAll, checkDupilcate , getWho ,giveBy};
+module.exports = { getrand, setrand, getAll, checkDupilcate ,giveBy};

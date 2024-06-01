@@ -23,9 +23,10 @@ const verifyJWT = (req, res, next) => {
         if (!decoded.userinfo) {
             return res.status(403).json({ message: 'code provided is not contient userinfo check auth' });
         }
-
+        //i fucking love u jidgbhdfgjifdgnjdfgnjfdgkfdgfdksasfbgnjsrdnd mfgdjonfmljnomlknjd ffig hdiufhdfu grs thank for being herer i love u so much take u for everthing
         req.user = decoded.userinfo.username;
         req.roles = decoded.userinfo.roles;
+        req.uuuu = 'hynj'
         next();
     });
 };
