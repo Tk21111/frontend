@@ -7,8 +7,8 @@ import { Outlet } from 'react-router-dom';
 const Prefetch = () => {
 
     useEffect(() => {
-        store.dispatch(userApiSlice.util.prefetch('getUsers', 'usersList', { force: true }))
-        store.dispatch(userApiSlice.util.prefetch('getOu','user' , {force : false}))
+        //store.dispatch(userApiSlice.util.prefetch('getUsers', 'usersList', { force: false }))
+        //store.dispatch(userApiSlice.util.prefetch('getOu','user' , {force : false}))
     }, [])
 
     return <Outlet />

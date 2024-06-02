@@ -30,7 +30,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
+        //console.log(user)
         try {
             const userData = await login({ user, pwd }).unwrap()
             //diffrent the ...userData is a accessToken
@@ -63,7 +63,7 @@ const Login = () => {
         <section className="login">
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> 
 
-            <h1>Employee Login</h1>
+            <h1>Login</h1>
 
             <form onSubmit={handleSubmit}> 
                 <label htmlFor="username">Username:</label>
@@ -88,14 +88,14 @@ const Login = () => {
                 <button>log In</button>
 
                 <label htmlFor="persist" className="form__persist">
-                        <input
-                            type="checkbox"
-                            className="form__checkbox"
-                            id="persist"
-                            onChange={handleToggle}
-                            checked={persist}
-                        />
-                        Trust this device
+                    <input
+                        type="checkbox"
+                        className="form__checkbox"
+                        id="persist"
+                        onChange={handleToggle}
+                        checked={persist}
+                    />
+                    Trust this device
                 </label>
             </form>
             <p><Link to="/registor"> sign in </Link></p>

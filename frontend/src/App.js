@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
-import Public from './components/Public'
+import Public from './components/Pubilc'
 import Login from './features/auth/Hlogin'
 import Welcome from './features/auth/Welcome'
 import RequireAuth from './features/auth/RequireAuth'
@@ -10,7 +10,9 @@ import UsergetNum from './features/users/UserGetNum'
 import Signin from './features/auth/Hsignin'
 import UsergetWho from './features/users/UserGetWho'
 import Usercheck from './features/users/UserCheck'
-import PersistLogin from './hooks/usePersist'
+import AdminGive from './features/users/AdminGive'
+import LogOut from './features/auth/Hlogout'
+import PersistLogin from './features/auth/PersistLogin'
 import Prefetch from './features/auth/Prefetch'
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
               <Route path="usergetnum" element={<UsergetNum />} />
               <Route path="usergetwho" element={<UsergetWho/>} />
               <Route path="usercheck" element={<Usercheck/>} />
+              <Route path="admincmd" element={<AdminGive/>} />
+              <Route path="logout" element={<LogOut/>} />
             </Route>
           </Route>
         </Route>

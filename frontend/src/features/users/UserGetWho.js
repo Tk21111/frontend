@@ -1,13 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useGetWhoMutation } from './usersApiSlice';
+import WhoReU from './UserNoToName';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../auth/authSlice';
 
 const UsergetWho = () => {
-    const user = useSelector(selectCurrentUser);
-    const [getWho, { data: users, isLoading, isSuccess, isError, error }] = useGetWhoMutation()
-    //req didn't get header ={username : user} so this fucking tthing is useless
+    const user = 'gvbhnj';
+
+    const [getWho, { data: users, isLoading, isError, error }] = useGetWhoMutation();
+    const errRef = useRef();
+    const [errMsg, setErrMsg] = useState('');
+    const userRef = useRef();
+    const [userMsg, setUserMsg] = useState('');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -22,27 +26,27 @@ const UsergetWho = () => {
         fetchData();
     }, [user, getWho]);
 
-    let content;
+    useEffect(() => {
+        if (error?.originalStatus === 404) {
+            setErrMsg('Not found, contact me');
+        } else if (isError) {
+            setErrMsg('An error occurred');
+            setUserMsg('joking it not now!!')
+        } else if (users) {
+            const result = WhoReU(users.no)
+            setUserMsg(`Your giver is ${users.username} with a number of ${users.no} which is name ${result}`);
+        }
+    }, [error, isError, users]); //should be in useeffect to prevent re-loading
 
-    if (isLoading) {
-        content = <p>Loading...</p>;
-    } else if (isSuccess) {
-        
-        content = (
-            <section className="users">
-                <h1>Users List</h1>
-                <h2>Your giver is {users.username} by the No. of {users.no} !!!!!</h2>
-                <Link to="/welcome">Back to Welcome</Link>
-            </section>
-        );
-    } else if (isError) {
-        content = (
-            <section className='users' >
-                <p>{JSON.stringify(error)}</p>
-                <Link to="/welcome">Back to Welcome</Link>
+    let content;
+    content = isLoading ? <p>Loading...</p> : (
+        <section className="users">
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <h1>It's time!!!</h1>
+            <h2 ref={userRef} className={userMsg ? "usermsg" : "offscreen"} aria-live="assertive" >{userMsg}</h2>
+            <Link to="/welcome">Back to Welcome</Link>
         </section>
     );
-    }
 
     return content;
 };

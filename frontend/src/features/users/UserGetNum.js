@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../auth/authSlice';
 
 const UserO = () => {
-    const user = useSelector(selectCurrentUser);
+    const user = 'gvbhnj'
     const [getRandnum, { data: users, isLoading, isSuccess, isError, error }] = useGetRandnumMutation()
     //req didn't get header ={username : user} so this fucking tthing is useless
     useEffect(() => {
@@ -29,18 +29,20 @@ const UserO = () => {
     } else if (isSuccess) {
         content = (
             <section className="users">
-                <h1>Users List</h1>
+                <h1>Yours number is !!!!</h1>
                 <h1>{users}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
     } else if (isError) {
+        let msg 
+        if (error.status === 403) { msg = "It's already there or This page is bug (It bug in test) just go back and check in your number"} else { msg = JSON.stringify(error)};
         content = (
-            <section className='users' >
-                <p>{JSON.stringify(error)}</p>
+            <section>
+                <h1>{msg}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
-        </section>
-    );
+            </section>  
+    )
     }
 
     return content;

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../auth/authSlice';
 
 const Usercheck = () => {
-    const user = useSelector(selectCurrentUser);
+    const user = 'gvbhnj';
     const [checkDull, { data: users, isLoading, isSuccess, isError, error }] = useCheckDullMutation()
     //req didn't get header ={username : user} so this fucking tthing is useless
     useEffect(() => {
@@ -29,18 +29,20 @@ const Usercheck = () => {
     } else if (isSuccess) {
         content = (
             <section className="users">
-                <h1>Users List</h1>
+                <h1>Cheke for Dupilcate pls don't have one</h1>
                 <h1>{JSON.stringify(users)}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
     } else if (isError) {
+        let msg 
+        if (error.originalStatus === 401) { msg = "You dont have permission"} else { msg = JSON.stringify(error)};
         content = (
-            <section className='users' >
-                <p>{JSON.stringify(error)}</p>
+            <section>
+                <h1>{msg}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
-        </section>
-    );
+            </section>  
+    )
     }
 
     return content;

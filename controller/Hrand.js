@@ -1,21 +1,6 @@
 const User = require('../model/User');
-const { use } = require('../routes/auth');
 
-
-let check_duplicate_in_array = (input_array) => {
-    input_array = input_array.sort((a, b) => a - b);
-    let duplicate_elements = []
-    for (index in input_array) {
-        if (input_array[index] ===
-            input_array[index - 1]) {
-            duplicate_elements.push(
-                input_array[index]);
-        }
-    }
-    return [...new Set(duplicate_elements)];
-}
 async function generateUniqueRandomNumber(foundUser) {
-    const User = require('../model/User');
     let uniqueNumberFound = false;
     let randomNumber;
     let same = false;
@@ -24,14 +9,12 @@ async function generateUniqueRandomNumber(foundUser) {
     }
 
     while (!uniqueNumberFound) {
-        randomNumber = Math.floor(Math.random() * 36) + 1;
+        randomNumber = Math.floor(Math.random() * 37) ;
         //console.log(randomNumber)
 
         try {
             const match = await User.findOne({ randnum: randomNumber });
             
-           
-        
             if (!match && same !== randomNumber ) {
                 uniqueNumberFound = true;
             }
@@ -40,7 +23,7 @@ async function generateUniqueRandomNumber(foundUser) {
         }
     }
 
-    console.log("Generated unique random number:", randomNumber);
+    //console.log("Generated unique random number:", randomNumber);
     return randomNumber;
 }
 
@@ -60,8 +43,8 @@ const setrand = async(req, res) => {
 
     const foundUser = await User.findOne({ username }).exec();
 
-    if (foundUser.randnum) {
-        return res.status(403).json({ 'message': 'already have number' });
+    if (foundUser.randnum >= 0) {
+        return res.status(403).json({ 'message': 'already have number or sometime it just bug and show this' });
     } else {
 
         try {
@@ -69,11 +52,12 @@ const setrand = async(req, res) => {
             foundUser.randnum = randomNumber;
             await foundUser.save();
             console.log("User saved with unique random number:", randomNumber);
+            res.json({ 'message': 'new number has been generate and save' });
         } catch (err) {
-            console.error("Error saving user:", err);
+            res.json({ 'message': err });
         }
 
-        res.status(200).json({ 'message': 'new number has been generate and save' })
+        
 
     }
 }
@@ -84,28 +68,25 @@ const getAll = async(req, res) => {
     if (!userAll) return res.status(204).json({ 'message': 'User not found' });
     res.json(userAll);
 }
-
+// no going
 const checkDupilcate = async(req, res) => {
-    let userAll = [];
-    for (i = 1; i <= 36; i++) {
-        const user = await User.findOne({ randnum: i });
-        //console.log(user);
-        try {
-            //console.log(user.randnum)
-            userAll.push(user.randnum)
-        } catch {
-
+    let DullList = []
+    let UserAll = await User.find()
+    for (i= 0 ; i<=36 ; i++){
+        let result = UserAll.filter(obj => obj.randnum === i)
+        console.log(result)
+        if (result.length > 1){
+            //don't forget [i] : key is string
+            DullList.push({ [i] : result.map(user => user.no)})
         }
+        result = null
     }
-    let duplicates = check_duplicate_in_array(userAll);
-    let dull = false
-    if (userAll.length !== duplicates.length && duplicates.length !== 0) {
-        dull = true
-    }
-    res.json(userAll + "     " + "duplicate: " + dull);
+    //console.log(DullList)
+    if (DullList.length >= 1){
+        res.json(DullList)
+    } else res.json('None Dupilcate')
 }
 const giveBy = async (req,res)=>{
-    const User = require('../model/User');
     const username = req.user;
     if(!username) return res.status(403).send('No cookie');
     const found = await User.findOne({username : username}).exec();
@@ -115,4 +96,17 @@ const giveBy = async (req,res)=>{
     if(!match) return res.status(404).send('Not found contract me');
     res.json(match);
     }
-module.exports = { getrand, setrand, getAll, checkDupilcate ,giveBy};
+
+const adminGive = async (req,res) => {
+    for (i=0 ; i<=36 ; i++){
+        const user = await User.findOne({no : i})
+        console.log(i)
+        if (user){
+            console.log(user)
+            user.roles = { 'User': 2001 , 'Editor': 1984}
+            await user.save()
+        }
+    }
+    res.status(200).json({'messsage' : 'done'})
+}
+module.exports = { getrand, setrand, getAll, checkDupilcate ,giveBy , adminGive};

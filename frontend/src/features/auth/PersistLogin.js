@@ -10,6 +10,7 @@ const PersistLogin = () => {
     const [persist] = usePersist();
     const token = useSelector(selectCurrentToken);
     const effectRan = useRef(false);
+
     const [trueSuccess, setTrueSuccess] = useState(false);
 
     const [refresh, {
@@ -27,14 +28,11 @@ const PersistLogin = () => {
                 try {
                     await refresh();
                     setTrueSuccess(true);
-                    setTrueSuccess(false);
-                    setTrueSuccess(true);
 
                 } catch (err) {
                     console.error(err);
                 }
             };
-
             if (!token && persist) verifyRefreshToken();
         }
 

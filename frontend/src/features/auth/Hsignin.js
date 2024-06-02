@@ -4,7 +4,6 @@ import { useNavigate , Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from './authSlice'
 import { useSigninMutation } from './authApiSlice'
-import usePersist from '../../hooks/usePersist'
 
 const Signin = () => {
     const userRef = useRef() //set focus on userinput
@@ -31,14 +30,14 @@ const Signin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (pwd === cpwd) {
+        if (pwd === cpwd && (no <=36 && no >=0) ) {
             try {
                 const userData = await signin({ user, pwd , no }).unwrap()
                 //diffrent the ...userData is a accessToken
                 dispatch(setCredentials({ ...userData, user }))
                 setUser('')
                 setPwd('')
-                navigate('/welcome')
+                navigate('/login')
             } catch (err) {
                 if (!err?.originalStatus) {
                     // isLoading: true until timeout occurs
@@ -47,6 +46,8 @@ const Signin = () => {
                     setErrMsg('Missing Username or Password');
                 } else if (err.originalStatus === 401) {
                     setErrMsg('Unauthorized');
+                } else if (err.originalStatus === 409) {
+                    setErrMsg('Username or Number is already taken');
                 } else {
                     setErrMsg('Login Failed');
                 }
@@ -54,7 +55,7 @@ const Signin = () => {
                 if (errRef.current) return errRef.current.focus();
                 
             }
-        } else {setErrMsg('Password not match');}
+        } else {setErrMsg('Password not match or Number is exceed an option');}
     }
 
     const handleUserInput = (e) => setUser(e.target.value)
@@ -67,7 +68,7 @@ const Signin = () => {
         <section className="login">
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> 
 
-            <h1>Employee Login</h1>
+            <h1>Signin</h1>
 
             <form onSubmit={handleSubmit}> 
                 <label htmlFor="username">Username:</label>
