@@ -32,8 +32,8 @@ const UserO = () => {
         } else if (isError) {
             setUserMsg('An error occurred');
         } else if (users) {
-            const result = WhoReU(users.no);
-            setUserMsg(`Your giver is ${users.username} with a number of ${users.no} which is named ${result}`);
+            const result = WhoReU(users);
+            setUserMsg(`No. : ${users} Name : ${result} pls check first`);
         }
     }, [error, isError, users]);
 
