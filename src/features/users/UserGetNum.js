@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect , useState , useRef} from 'react';
 import { useGetRandnumMutation } from './usersApiSlice';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../auth/authSlice';
+import WhoReU from './UserNoToName';
 
 const UserO = () => {
     const user = 'gvbhnj'
     const [getRandnum, { data: users, isLoading, isSuccess, isError, error }] = useGetRandnumMutation()
+    const userRef = useRef();
+    const [userMsg, setuserMsg] = useState('');
     //req didn't get header ={username : user} so this fucking tthing is useless
     useEffect(() => {
         const fetchData = async () => {
@@ -21,25 +24,33 @@ const UserO = () => {
 
         fetchData();
     }, [user, getRandnum]);
-
+    useEffect(() => {
+        if (error?.status === 409) {
+            setuserMsg('Already have random number');
+        } else if (isError) {
+            setuserMsg('An error occurred');
+        } else if (users) {
+            const result = WhoReU(users.no)
+            setuserMsg(`Your giver is ${users.username} with a number of ${users.no} which is name ${result}`);
+        }
+    }, [error, isError, users]); //should be in useeffect to prevent re-loading
+    
     let content;
 
-    if (isLoading) {
-        content = <p>Loading...</p>;
-    } else if (isSuccess) {
-        content = (
-            <section className="users">
-                <h1>Yours number is !!!!</h1>
-                <h1>{users}</h1>
+    
+    content = isLoading? <p>Loading...</p> : content = (
+        <section>
+                <h> u have to give toooooo!!!</h>
+                <h2 ref={userRef} className={userMsg ? "usermsg" : "offscreen"} aria-live="assertive" >{userMsg}</h2>
                 <Link to="/welcome">Back to Welcome</Link>
-            </section>
+        </section>  
         );
-    } else if (isError) {
-        let msg 
-        if (error.status === 403) { msg = "It's already there or This page is bug (It bug in test) just go back and check in your number"} else { msg = JSON.stringify(error)};
+    
+    if (isError) {
         content = (
-            <section>
-                <h1>{msg}</h1>
+            <section className='users'>
+                <h2 ref={userRef} className={userMsg ? "usermsg" : "offscreen"} aria-live="assertive" >{userMsg}</h2>
+                <Link to='/user'> Your random rumber</Link>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>  
     )
