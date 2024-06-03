@@ -12,7 +12,7 @@ const Login = () => {
     const [user, setUser] = useState('')
     const [pwd, setPwd] = useState('')
     const [errMsg, setErrMsg] = useState('')
-    const [persist , setPersist] = usePersist()
+    //const [persist , setPersist] = usePersist()
     
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -57,7 +57,7 @@ const Login = () => {
 
     const handleUserInput = (e) => setUser(e.target.value)
     const handlePwdInput = (e) => setPwd(e.target.value)
-    const handleToggle = () => setPersist(prev => !prev)
+    //const handleToggle = () => setPersist(prev => !prev)
 
     const content = isLoading ? <h1>Loading...</h1> : (
         <section className="login">
@@ -95,7 +95,7 @@ const Login = () => {
                         onChange={handleToggle}
                         checked={persist}
                     />
-                    Trust this device
+                    Trust this device (not working cause by domain)
                 </label>
             </form>
             <p><Link to="/registor"> sign in </Link></p>
