@@ -33,7 +33,7 @@ const UserO = () => {
     } else if (isSuccess) {
         content = (
             <section className="users">
-                <h1>Your giver is </h1>
+                <h1>U have to give to </h1>
                 <h1>{ users }</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
