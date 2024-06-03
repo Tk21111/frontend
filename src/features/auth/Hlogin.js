@@ -95,7 +95,7 @@ const Login = () => {
                         onChange={handleToggle}
                         checked={persist}
                     />
-                    Trust this device
+                    ignore this it not working
                 </label>
             </form>
             <p><Link to="/registor"> sign in </Link></p>
