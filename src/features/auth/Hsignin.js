@@ -82,7 +82,7 @@ const Signin = () => {
                     required
                 />
 
-                <label htmlFor="no">เลขที่มึงอ่ะ</label>
+                <label htmlFor="no">No.</label>
                 <input
                     type="number"
                     id="no."
