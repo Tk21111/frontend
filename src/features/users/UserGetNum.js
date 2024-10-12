@@ -27,14 +27,15 @@ const UserO = () => {
     }, [user, getRandnum]);
 
     useEffect(() => {
-        if (error?.status === 409) {
+        if (error?.status === 409 || error?.status === 403 ) {
             setUserMsg('Already have random number');
         } else if (isError) {
-            setUserMsg('An error occurred');
+            setUserMsg('An error occurred' + error?.status);
         } else if (users) {
             const result = WhoReU(users);
             setUserMsg(`No. : ${users} Name : ${result} pls check first`);
         }
+        console.log(error?.status);
     }, [error, isError, users]);
 
     let content;

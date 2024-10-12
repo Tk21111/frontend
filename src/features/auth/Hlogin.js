@@ -95,7 +95,7 @@ const Login = () => {
                         onChange={handleToggle}
                         checked={persist}
                     />
-                    ignore this it not working
+                    remember
                 </label>
             </form>
             <p><Link to="/registor"> sign in </Link></p>

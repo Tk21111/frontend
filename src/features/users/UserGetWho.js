@@ -27,11 +27,11 @@ const UsergetWho = () => {
     }, [user, getWho]);
 
     useEffect(() => {
+        console.log(error?.originalStatus);
         if (error?.originalStatus === 404) {
             setErrMsg('Not found, contact me');
-        } else if (isError) {
-            setErrMsg('An error occurred');
-            setUserMsg('joking it not now!!')
+        } else if (error?.originalStatus === 401) {
+            setUserMsg('ยังไม่ถึงวันเฉลย pls wait')
         } else if (users) {
             const result = WhoReU(users.no)
             setUserMsg(`Your giver is ${users.username} with a number of ${users.no} which is name ${result}`);
@@ -42,7 +42,7 @@ const UsergetWho = () => {
     content = isLoading ? <p>Loading...</p> : (
         <section className="users">
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            <h1>It's time!!!</h1>
+            <h2>เฉลย</h2>
             <h2 ref={userRef} className={userMsg ? "usermsg" : "offscreen"} aria-live="assertive" >{userMsg}</h2>
             <Link to="/welcome">Back to Welcome</Link>
         </section>
