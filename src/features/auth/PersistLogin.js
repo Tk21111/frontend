@@ -29,6 +29,8 @@ const PersistLogin = () => {
         // Skip the first effect run in development mode due to React 18 Strict Mode
         if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
             const verifyRefreshToken = async () => {
+
+                console.log('sent')
                 try {
                     //why writing when i already
 
