@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../auth/authSlice';
 
 const UserO = () => {
-    const user = 'gvbhnj'
+   
     const [getO, { data: users, isLoading, isSuccess, isError, error }] = useGetOMutation('user', {
         pollingInterval: 60000,
         refetchOnFocus: true,
@@ -15,16 +15,16 @@ const UserO = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (user) {
-                    await getO(user);
-                }
+             
+                await getO();
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, [user, getO]);
+    }, [ getO]);
 
     let content;
 

@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useAdminGiveMutation } from './usersApiSlice';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import useRoleCheck from './role';
 
 const Usercheck = () => {
     const [adminGive, { data: users, isLoading , isError, error }] = useAdminGiveMutation();
     const [msg, setMsg] = useState('');
     const [pwd, setPwd] = useState('');
+
+    const isAdmin = useRoleCheck('Admin')
 
     useEffect(() => {
         setMsg('');
@@ -38,8 +42,18 @@ const Usercheck = () => {
     const handlePwdInput = (e) => setPwd(e.target.value);
 
     let content;
-    
-    content = isLoading ? <p>Loading...</p> : (
+
+    if (!isAdmin) {
+        content = (
+            <>
+                <p>Hey, what are you doing here?</p>
+                <Link to="/welcome">Back to Welcome</Link>
+            </>
+        );
+    } else if (isLoading) {
+        content = <p>Loading...</p>;
+    } else {
+        content = (
             <section className="users">
                 <p className={msg ? "done" : "offscreen"} aria-live="assertive">{msg}</p>
                 <h1>Given permission to see</h1>
@@ -59,10 +73,10 @@ const Usercheck = () => {
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
-    
-    
+    }
 
     return content;
+
 }
 
 export default Usercheck;

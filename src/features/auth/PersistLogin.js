@@ -2,14 +2,18 @@ import { Outlet, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from 'react';
 import { useRefreshMutation } from "./authApiSlice";
 import usePersist from "../../hooks/usePersist";
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from "./authSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentToken, setCredentials } from "./authSlice";
 import PulseLoader from 'react-spinners/PulseLoader';
+import { jwtDecode } from 'jwt-decode';
+
+//im confuse wtf -29/10/2024
 
 const PersistLogin = () => {
     const [persist] = usePersist();
     const token = useSelector(selectCurrentToken);
     const effectRan = useRef(false);
+    const dispatch = useDispatch();
 
     const [trueSuccess, setTrueSuccess] = useState(false);
 
@@ -26,7 +30,15 @@ const PersistLogin = () => {
         if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
             const verifyRefreshToken = async () => {
                 try {
-                    await refresh();
+                    //why writing when i already
+
+                    const response = await refresh();
+                    
+                    const  accessToken  = response.data.accessToken
+                    const decoded = jwtDecode(accessToken);
+
+                    dispatch(setCredentials({user : decoded.userinfo.username , roles : decoded.userinfo.roles}));
+
                     setTrueSuccess(true);
 
                 } catch (err) {

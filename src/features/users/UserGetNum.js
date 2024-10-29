@@ -6,35 +6,39 @@ import { selectCurrentUser } from '../auth/authSlice';
 import WhoReU from './UserNoToName';
 
 const UserO = () => {
-    const currentUser = useSelector(selectCurrentUser); // Get current user from redux state
-    const user = currentUser?.username || 'gvbhnj'; // Default to 'gvbhnj' if no current user
+    //const currentUser = useSelector(selectCurrentUser); // Get current user from redux state
+    //const user = currentUser?.username || 'gvbhnj'; // Default to 'gvbhnj' if no current user //wtf is this ?????? && why is this even require  -29/10-2024 
     const [getRandnum, { data: users, isLoading, isSuccess, isError, error }] = useGetRandnumMutation();
     const userRef = useRef();
     const [userMsg, setUserMsg] = useState('');
+    const [number , setNumber] = useState()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (user) {
-                    await getRandnum({ username: user }); // Pass user object
-                }
+              
+                setNumber((await getRandnum())['data']); 
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, [user, getRandnum]);
+    }, [ getRandnum]);
 
     useEffect(() => {
-        if (error?.status === 409 || error?.status === 403 ) {
+        console.log(users)
+        console.log(number)
+        console.log(number)
+        if (number) {
+            const result = WhoReU(number);
+            setUserMsg(`No. : ${number} Name : ${result}`);
+        } else if (error?.status === 409 || error?.status === 403 ) {
             setUserMsg('Already have random number');
         } else if (isError) {
             setUserMsg('An error occurred' + error?.status);
-        } else if (users) {
-            const result = WhoReU(users);
-            setUserMsg(`No. : ${users} Name : ${result} pls check first`);
-        }
+        }  
         console.log(error?.status);
     }, [error, isError, users]);
 

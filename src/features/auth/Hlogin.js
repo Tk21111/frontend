@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { setCredentials } from './authSlice'
 import { useLoginMutation } from './authApiSlice'
 import usePersist from '../../hooks/usePersist'
+import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
     const userRef = useRef() //set focus on userinput
@@ -33,12 +34,17 @@ const Login = () => {
         //console.log(user)
         try {
             const userData = await login({ user, pwd }).unwrap()
+
+            const res =  userData.accessToken
+            const decode =  jwtDecode(res)
+            console.log(decode)
             //diffrent the ...userData is a accessToken
-            dispatch(setCredentials({ ...userData, user }))
+            dispatch(setCredentials({ ...userData, user , roles : decode.userinfo.roles }))
             setUser('')
             setPwd('')
             navigate('/welcome')
         } catch (err) {
+            console.error(err)
             if (!err?.originalStatus) {
                 // isLoading: true until timeout occurs
                 setErrMsg('No Server Response');

@@ -1,48 +1,51 @@
 import { useEffect } from 'react';
 import { useCheckDullMutation } from './usersApiSlice';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../auth/authSlice';
+import useRoleCheck from './role';
 
 const Usercheck = () => {
-    const user = 'gvbhnj';
-    const [checkDull, { data: users, isLoading, isSuccess, isError, error }] = useCheckDullMutation()
-    //req didn't get header ={username : user} so this fucking tthing is useless
+    const [checkDull, { data: users, isLoading, isSuccess, isError, error }] = useCheckDullMutation();
+    const isEditor = useRoleCheck('Editor');
+    let content;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (user) {
-                    await checkDull(user);
-                }
+                await checkDull();
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
+        
         fetchData();
-    }, [user, checkDull]);
+    }, [checkDull]);
 
-    let content;
-
-    if (isLoading) {
+    if (!isEditor) {
+        // User is not an editor, so show this content
+        content = (
+            <section className="users">
+                <h1>wtf r u doing here</h1>
+                <Link to="/welcome">Back to Welcome</Link>
+            </section>
+        );
+    } else if (isLoading) {
         content = <p>Loading...</p>;
     } else if (isSuccess) {
         content = (
             <section className="users">
-                <h1>Cheke for Dupilcate pls don't have one</h1>
+                <h1>Check for Duplicate, please don't have one</h1>
                 <h1>{JSON.stringify(users)}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
     } else if (isError) {
-        let msg 
-        if (error.originalStatus === 401) { msg = "You dont have permission"} else { msg = JSON.stringify(error)};
+        const msg = error?.originalStatus === 401 ? "You don't have permission" : JSON.stringify(error);
         content = (
             <section>
                 <h1>{msg}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
-            </section>  
-    )
+            </section>
+        );
     }
 
     return content;
