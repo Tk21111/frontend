@@ -28,10 +28,7 @@ const UserO = () => {
     }, [ getRandnum]);
 
     useEffect(() => {
-        console.log(users)
-        console.log(number)
-        console.log(number)
-        if (number) {
+        if (number >= 0 && number <=36) {
             const result = WhoReU(number);
             setUserMsg(`No. : ${number} Name : ${result}`);
         } else if (error?.status === 409 || error?.status === 403 ) {

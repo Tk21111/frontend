@@ -3,6 +3,7 @@ import { useGetOMutation } from './usersApiSlice';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../auth/authSlice';
+import WhoReU from './UserNoToName';
 
 const UserO = () => {
    
@@ -34,7 +35,7 @@ const UserO = () => {
         content = (
             <section className="users">
                 <h1>U have to give to </h1>
-                <h1>{ users }</h1>
+                <h1>{ users + " : " +  WhoReU(users)}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
