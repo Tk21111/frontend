@@ -2,7 +2,7 @@ import { createApi , fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import { setCredentials , logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
-    baseUrl : process.env.REACT_APP_API, //http://localhost:3500/ 'https://randap-api.onrender.com'
+    baseUrl : process.env.REACT_APP_API, 
     credentials : 'include', //set back http-only secure cookie every time
     prepareHeaders : (headers , {getState}) =>{
         const token = getState().auth.token
