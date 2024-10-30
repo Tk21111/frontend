@@ -43,7 +43,12 @@ const UsergetWho = () => {
         <section className="users">
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h2>เฉลย</h2>
-            <h2 ref={userRef} className={userMsg ? "usermsg" : "offscreen"} aria-live="assertive" >{userMsg}</h2>
+            
+            <h2 >{`Username : ${users?.username}`}</h2>
+            <h2 >{`ชื่อเล่น : ${WhoReU(users?.no)?.split(' ')[0]}`}</h2>
+            <h2 >{`ชื่อ : ${WhoReU(users?.no)?.split(' ')[1]}`}</h2>
+            <h2 >{`นามสกุล : ${WhoReU(users?.no)?.split('  ')[1]}`}</h2>
+            
             <Link to="/welcome">Back to Welcome</Link>
         </section>
     );
