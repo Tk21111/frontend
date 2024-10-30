@@ -35,7 +35,10 @@ const UserO = () => {
         content = (
             <section className="users">
                 <h1>U have to give to </h1>
-                <h1>{ users + " : " +  WhoReU(users)}</h1>
+                <h2 >{`No. : ${users}`}</h2>
+                <h2 >{`ชื่อเล่น : ${WhoReU(users)?.split(' ')[0]}`}</h2>
+                <h2 >{`ชื่อ : ${WhoReU(users)?.split(' ')[1]}`}</h2>
+                <h2 >{`นามสกุล : ${WhoReU(users)?.split('  ')[1]}`}</h2>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );

@@ -81,3 +81,12 @@ a:hover, a:focus {
   padding: 10%;
   margin: 2%;
 }
+.seclect {
+  justify-content: space-between;
+  flex-direction: column;
+}
+.selectChild {
+  width: 25%;
+  padding: 2%;
+  margin: 1%;
+}

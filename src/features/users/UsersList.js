@@ -49,6 +49,7 @@ const UsersList = () => {
                                 <p>username{" : " + user.username}</p>
                                 <p>Name{" : " + WhoReU(user.no)}</p>
                                 <p>randomnumber{" : " +user.randnum}</p>
+                                <p>Give to {" : " + WhoReU(user.randnum)}</p>
                             </div>
                         </li>
                     )
