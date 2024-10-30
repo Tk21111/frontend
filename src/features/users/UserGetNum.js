@@ -67,7 +67,7 @@ const UserO = () => {
                 {fetched ? <h2 >{`ชื่อ : ${WhoReU(number)?.split(' ')[1]}`}</h2> : null}
                 {fetched ? <h2 >{`นามสกุล : ${WhoReU(number)?.split('  ')[1]}`}</h2> : null}
                 <div className='seclect'>
-                { !fetched ?  <h1 style={{color: 'red'}}> \/ select one \/</h1> : null}
+                {!fetched ?  <h1 style={{color: 'red'}}> \/ select one \/</h1> : null}
                 {!fetched ? Array.from({ length: (Math.floor(Math.random()* 36) + 1) }, (_, i) => (
                     <button key={i} className='selectChild' onClick={() => {fetchData(); setFetched(true) }}>
                     {i}
