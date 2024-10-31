@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useGetOMutation , useGetOuQuery ,useGetUsersQuery} from './usersApiSlice';
+import { useEffect, useState } from 'react';
+import { useGetOMutation, useGetOuQuery, useGetUsersQuery } from './usersApiSlice';
 import WhoReU from './UserNoToName';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -17,58 +17,71 @@ const UsersList = () => {
         pollingInterval: 60000,
         refetchOnFocus: true,
         refetchOnMountOrArgChange: true
-    })
+    });
+
+    const [search, setSearch] = useState(null);
 
     const isEditor = useRoleCheck('Editor');
-    //user === same as database in sever
-    // <ul/> === list รวม
     const username = useSelector(selectCurrentUser);
+
     let content;
-    if (!isEditor){
+
+    if (!isEditor) {
         content = (
             <>
                 <p>wat r u doing</p>
                 <Link to="/welcome">Back to Welcome</Link>
             </>
-    )
-    }
-    else if (isLoading) {
+        );
+    } else if (isLoading) {
         content = <p>"Loading..."</p>;
     } else if (isSuccess) {
-        //const filteredUsers = users.filter(user => user.username === username);
+        let contentList = users;
+
+        if (search !== null && search !== '') {
+            const searchNumber = parseInt(search, 10);
+            contentList = users.filter((obj) => obj['no'] === searchNumber);
+        }
+
         content = (
             <section className="users">
                 <h1>Users List</h1>
                 <Link to="/welcome">Back to Welcome</Link>
+                <input 
+                    value={search || ''} 
+                    onChange={(e) => setSearch(e.target.value)}
+                    id="search"
+                    placeholder="Search..."
+                    type="number"
+                />
                 <ul>
-                    {users.map((user, i) => {
-                        return (
-                        //<li key={i}>{`username : ${user.username}          Name :     ${WhoReU(user.no)}           no :   ${user.no}       randomnumber : ${user.randnum} `}</li>
+                    {contentList.map((user, i) => (
                         <li key={i}>
-                            <div className='llo'>
-                                <p>username{" : " + user.username}</p>
-                                <p>Name{" : " + WhoReU(user.no)}</p>
-                                <p>randomnumber{" : " +user.randnum}</p>
-                                <p>Give to {" : " + WhoReU(user.randnum)}</p>
+                            <div className="llo">
+                                <p>username: {user.username}</p>
+                                <p>Name: {WhoReU(user.no)}</p>
+                                <p>randomnumber: {user.randnum}</p>
+                                <p>Give to: {WhoReU(user.randnum)}</p>
                             </div>
                         </li>
-                    )
-                    })}
+                    ))}
                 </ul>
-                
             </section>
-        )
+        );
     } else if (isError) {
-        let msg 
-        if (error.originalStatus === 401) { msg = "You dont have permission"} else { msg = JSON.stringify(error)}
+        const errorMsg = error.originalStatus === 401 
+            ? "You don't have permission" 
+            : JSON.stringify(error);
+            
         content = (
             <section>
-                <h1>{msg}</h1>
+                <h1>{errorMsg}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
-            </section>  
-    )
+            </section>
+        );
     }
 
-    return content
-}
-export default UsersList
+    return content;
+};
+
+export default UsersList;
