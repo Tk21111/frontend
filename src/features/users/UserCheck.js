@@ -32,11 +32,11 @@ const Usercheck = () => {
     } else if (isLoading) {
         content = <p>Loading...</p>;
     } else if (isSuccess) {
-        const toName = users.map(val => whoReU(val))
+        const toName = users.map(val => WhoReU(val))
         content = (
             <section className="users">
                 <h1>Check for Duplicate, please don't have one</h1>
-                <h1>{JSON.stringify(toName)</h1>
+                <h1>{toName}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
