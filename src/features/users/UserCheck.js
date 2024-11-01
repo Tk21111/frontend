@@ -36,7 +36,7 @@ const Usercheck = () => {
         content = (
             <section className="users">
                 <h1>Check for Duplicate, please don't have one</h1>
-                <h1>{toName}</h1>
+                <h1>{toName.toString()}</h1>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );
