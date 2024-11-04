@@ -38,7 +38,6 @@ const WhoReU = (noReq) =>{
         'มิ้ม ลภัสรดา  นิธิภรภัทร์',
         'แพรเล็ก โยษิตา  แสงทอง']
     const result = nameArr[noReq]
-    console.log(result)
     return result
 }
 
