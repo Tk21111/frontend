@@ -32,7 +32,7 @@ const Usercheck = () => {
     } else if (isLoading) {
         content = <p>Loading...</p>;
     } else if (isSuccess) {
-        const toName = users.map(val => WhoReU(val))
+        const toName = users.map(val => WhoReU(val) || val)
         content = (
             <section className="users">
                 <h1>Check for Duplicate, please don't have one</h1>
