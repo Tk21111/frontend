@@ -22,7 +22,7 @@ const Welcome = () => {
             {(!isAdmin && !isEditor) ? (
                 <>
                     <p><Link to="/user">Your random number</Link></p>
-                    <p><Link to="/usergetnum">Go get your number</Link></p>
+               
                     <p style={{ color: 'red' }}>/\ click here /\</p>
                 </>
             ) : null}
