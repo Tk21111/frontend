@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useAdminGiveMutation } from './usersApiSlice';
+import { useAdminGiveMutation, useAdminResetMutation } from './usersApiSlice';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useRoleCheck from './role';
 
 const Usercheck = () => {
     const [adminGive, { data: users, isLoading , isError, error }] = useAdminGiveMutation();
+    const [adminReset , {data }] = useAdminResetMutation();
     const [msg, setMsg] = useState('');
     const [pwd, setPwd] = useState('');
 
@@ -14,6 +15,15 @@ const Usercheck = () => {
     useEffect(() => {
         setMsg('');
     }, [pwd]);
+
+    const handleReset = async ()=>{
+        try{    
+            await adminReset();
+        } catch (err){
+            setMsg(err)
+        }
+        
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -70,6 +80,9 @@ const Usercheck = () => {
                     <button>Confirm</button>
                 </form>
                 <h1>{JSON.stringify(users)}</h1>
+                <form onSubmit={handleReset}>
+                    <button className='bg-red-700'>RESET</button>
+                </form>
                 <Link to="/welcome">Back to Welcome</Link>
             </section>
         );

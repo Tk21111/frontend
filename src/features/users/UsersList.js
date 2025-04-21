@@ -44,7 +44,7 @@ const UsersList = () => {
         }
 
         content = (
-            <section className="users">
+            <section className="flex flex-col justify-center align-middle text-center mt-[2%] w ">
                 <h1>Users List</h1>
                 <Link to="/welcome">Back to Welcome</Link>
                 <input 
@@ -53,10 +53,11 @@ const UsersList = () => {
                     id="search"
                     placeholder="Search..."
                     type="number"
+                    className='text-black'
                 />
                 <ul>
                     {contentList.map((user, i) => (
-                        <li key={i}>
+                        <li key={i} className='flex h-30 min-w-full'>
                             <div className="llo">
                                 <p>username: {user.username}</p>
                                 <p>Name: {WhoReU(user.no)}</p>

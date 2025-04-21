@@ -43,8 +43,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
                 credential: 'include'
             })
+        }),
+        adminReset : builder.mutation({
+            query : ()=> ({
+                url : '/randnum/reset',
+                method : "GET",
+                credential : 'include'
+            })
         })
     })
 });
 
-export const { useGetUsersQuery, useGetOMutation , useGetRandnumMutation , useGetWhoMutation ,useCheckDullMutation , useAdminGiveMutation} = userApiSlice;
+export const { useGetUsersQuery, useGetOMutation , useGetRandnumMutation , useGetWhoMutation ,useCheckDullMutation , useAdminGiveMutation , useAdminResetMutation} = userApiSlice;
