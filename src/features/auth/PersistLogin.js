@@ -34,9 +34,11 @@ const PersistLogin = () => {
                 try {
                     //why writing when i already
 
-                    const response = await refresh();
-                    
-                    const  accessToken  = response.data.accessToken
+                    const refreshToken = localStorage.getItem("refreshToken");
+                    console.log(refreshToken)
+                    const response = await refresh({ refreshToken }).unwrap();
+                    console.log(response)
+                    const  accessToken  = response.accessToken
                     const decoded = jwtDecode(accessToken);
 
                     dispatch(setCredentials({user : decoded.userinfo.username , roles : decoded.userinfo.roles}));
@@ -47,22 +49,19 @@ const PersistLogin = () => {
                     console.error(err);
                 }
             };
-            if (!token && persist) verifyRefreshToken();
+            if (!token) verifyRefreshToken();
         }
 
         return () => effectRan.current = true;
-    }, [token, persist, refresh]);
+    }, [token, refresh]);
 
     let content;
-
-    if (!persist) {
-        // When persist is false
-        content = <Outlet />;
-    } else if (isLoading) {
+    if (isLoading) {
         // When the refresh token is being verified
         content = <PulseLoader color={"#FFF"} />;
     } else if (isError) {
         // When there's an error verifying the refresh token
+        console.log(error)
         content = (
             <p className='errmsg'>
                 {`${error?.data?.message} - `}

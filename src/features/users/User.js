@@ -33,7 +33,7 @@ const UserO = () => {
         content = <p>Loading...</p>;
     } else if (isSuccess) {
         content = (
-            <section className="users">
+            <section className="flex flex-col justify-center align-middle text-center">
                 <h1>U have to give to </h1>
                 <h2 >{`No. : ${users}`}</h2>
                 <h2 >{`ชื่อเล่น : ${WhoReU(users)?.split(' ')[0]}`}</h2>

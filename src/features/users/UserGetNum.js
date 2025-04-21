@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../auth/authSlice';
 import WhoReU from './UserNoToName';
+import { Eye, EyeClosed } from 'lucide-react';
+import ButtonRanNum from '../../components/button';
+import Confetti from '../../components/celebrate';
 
 const UserO = () => {
     //const currentUser = useSelector(selectCurrentUser); // Get current user from redux state
@@ -14,14 +17,17 @@ const UserO = () => {
     const [number , setNumber] = useState()
     const [fetched , setFetched] = useState(false)
 
-    
+    const [isVisible, setIsVisible] = useState(false);
+
+    console.log(number)
     const fetchData = async () => {
         try {
               
             setNumber((await getRandnum())['data']); 
-            if (number >= 0 && number <=36) {
+            if (number) {
                 const result = WhoReU(number);
                 setUserMsg(`No. : ${number} Name : ${result}`);
+                setIsVisible(true)
             }
                 
         } catch (error) {
@@ -33,7 +39,7 @@ const UserO = () => {
    
 
     useEffect(() => {
-        if (number >= 0 && number <=36) {
+        if (number >0 && number <=37) {
             const result = WhoReU(number);
             setUserMsg(`No. : ${number} Name : ${result}`);
         } else if (error?.status === 409 || error?.status === 403 ) {
@@ -60,22 +66,28 @@ const UserO = () => {
         );
     } else {
         content = (
-            <section>
-                <h2>u have to give toooooo!!!</h2>
-                {fetched ? <h2 >{`No. : ${number}`}</h2> : null}
-                {fetched ? <h2 >{`ชื่อเล่น : ${WhoReU(number)?.split(' ')[0]}`}</h2> : null}
-                {fetched ? <h2 >{`ชื่อ : ${WhoReU(number)?.split(' ')[1]}`}</h2> : null}
-                {fetched ? <h2 >{`นามสกุล : ${WhoReU(number)?.split('  ')[1]}`}</h2> : null}
-                <div className='seclect'>
-                {!fetched ?  <h1 style={{color: 'red'}}> \/ select one \/</h1> : null}
-                {!fetched ? Array.from({ length: (Math.floor(Math.random()* 36) + 1) }, (_, i) => (
-                    <button key={i} className='selectChild' onClick={() => {fetchData(); setFetched(true) }}>
-                    {i}
-                </button>
-                )) : null}
-                </div>
-                <Link to="/welcome">Back to Welcome</Link>
-            </section>
+            <>
+                <section className='login flex flex-col justify-start mt-[10%] align-middle text-center'>
+                    
+                    <h2>u have to give toooooo!!!</h2>
+                    {users ? <div className='transition-all duration-200 ease-in-out'>
+                        <h2 >{`No. : ${number}`}</h2>
+                        <h2 >{`ชื่อเล่น : ${WhoReU(number)?.split(' ')[0]}`}</h2>
+                        <h2 >{`ชื่อ : ${WhoReU(number)?.split(' ')[1]}`}</h2>
+                        <h2 >{`นามสกุล : ${WhoReU(number)?.split('  ')[1]}`}</h2>
+                    </div> : null}
+                    <div className='seclect'>
+                    {!users ?  <h1 style={{color: 'red'}}> \/ select one \/</h1> : null}
+                    {!users ? Array.from({ length: (Math.floor(Math.random()* 36) + 1) }, (_, i) => (
+                        <ButtonRanNum i={i} key={i} func={fetchData}/>
+                    )) : null}
+                    </div>
+                    <Link to="/welcome">Back to Welcome</Link>
+                    
+                </section>
+                {/*isVisible && <Confetti />*/}
+            </>
+            
         );
     }
 

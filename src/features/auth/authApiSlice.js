@@ -33,10 +33,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
             }
         }),
         refresh: builder.mutation({
-            query: () => ({
+            query: (data) => ({
                 url: '/refresh',
-                method: 'GET',
+                method: 'POST',
                 credential : true,
+                body : {...data}
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled  }) {  //dispatch , queryFulfiled is useState() property
                 try {

@@ -5,7 +5,11 @@ const authSlice = createSlice({
     initialState: { user : null , token: null , roles : null},
     reducers: {
         setCredentials: (state, action) => {
-            const { user , accessToken , roles} = action.payload
+            const { user , accessToken , roles , refreshToken} = action.payload
+
+            if(refreshToken){
+                localStorage.setItem("refreshToken" , refreshToken);
+            }
             if (user) {
                 state.user = user
             } 

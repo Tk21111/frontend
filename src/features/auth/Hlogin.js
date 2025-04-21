@@ -6,14 +6,17 @@ import { setCredentials } from './authSlice'
 import { useLoginMutation } from './authApiSlice'
 import usePersist from '../../hooks/usePersist'
 import { jwtDecode } from 'jwt-decode'
+import WhoReU from '../users/UserNoToName'
+import { Eye, EyeClosed } from 'lucide-react'
 
 const Login = () => {
-    const userRef = useRef() //set focus on userinput
+
     const errRef = useRef()
-    const [user, setUser] = useState('')
-    const [pwd, setPwd] = useState('')
+    const [number , setNumber] = useState(null);
+    const [pwd , setPwd] = useState(null);
+
+    const [show , setShow] = useState(false);
     const [errMsg, setErrMsg] = useState('')
-    const [persist , setPersist] = usePersist()
     
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -21,37 +24,39 @@ const Login = () => {
     const [login, { isLoading }] = useLoginMutation()
     
 
-    useEffect(() => {
-        userRef.current.focus()
-    }, [])
 
+    console.log(number)
     useEffect(() => {
         setErrMsg('')
-    }, [user, pwd])
+    }, [number])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         //console.log(user)
         try {
-            const userData = await login({ user, pwd }).unwrap()
+
+            if(number > 37 && !pwd){
+                setErrMsg("Require pwd for Admin and Editor")
+            }
+            const userData = await login({number , pwd}).unwrap()
 
             const res =  userData.accessToken
             const decode =  jwtDecode(res)
-            console.log(decode)
+      
             //diffrent the ...userData is a accessToken
-            dispatch(setCredentials({ ...userData, user , roles : decode.userinfo.roles }))
-            setUser('')
-            setPwd('')
+            dispatch(setCredentials({ ...userData, roles : decode.userinfo.roles }))
+            
             navigate('/welcome')
         } catch (err) {
             console.error(err)
-            if (!err?.originalStatus) {
+            if (!err?.status) {
                 // isLoading: true until timeout occurs
                 setErrMsg('No Server Response');
-            } else if (err.originalStatus === 400) {
+            } else if (err.status === 400) {
                 setErrMsg('Missing Username or Password');
-            } else if (err.originalStatus === 401) {
-                setErrMsg('Unauthorized');
+            } else if (err.status === 401) {
+                setErrMsg('Unauthorized ' + err.data.msg);
             } else {
                 setErrMsg('Login Failed pls wait or change username');
             }
@@ -61,51 +66,51 @@ const Login = () => {
         }
     }
 
-    const handleUserInput = (e) => setUser(e.target.value)
-    const handlePwdInput = (e) => setPwd(e.target.value)
-    const handleToggle = () => setPersist(prev => !prev)
 
     const content = isLoading ? <h1>Loading...</h1> : (
-        <section className="login">
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> 
+        <div className="login flex flex-col justify-baselines mt-[10%] align-middle w-full">
+            <section className='flex flex-col items-center justify-center'>
+            
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> 
 
-            <h1>Login</h1>
+                <h1 className='text-3xl font-bold'>Login</h1>
+                
+                <form onSubmit={handleSubmit} className='flex flex-col space-y-2.5'> 
+                    <div className='flex flex-col space-y-0.5'>
+                        <label htmlFor="username">เลขที่:</label>
+                        <select className='text-black' onChange={(e)=> setNumber(e.target.value)} required value={number}>
+                            {Array.from({ length : 40} , (_,i) => <option value={i} key={i} className='text-black'>{!i ? "select": i === 38 ? "Admin" : i===39 ? "Editor" : i}</option>)}
+                        </select>
+                    </div>
+                
+                    <div className='flex flex-col space-y-0.5'>
+                        <label>pwd</label>
+                        
+                        <div className='flex flex-row justify-items-center space-x-1.5'>
+                            <input
+                                onChange={(e)=>setPwd(e.target.value)}
+                                value={pwd}
+                                autoComplete={false}
+                                type={show ?'text' : 'password'  }
+                                className='text-black w-full'
+                                required
+                            >
+                            </input>
+                            <div className='mt-[3%]'>
+                                {!show ? <Eye onClick={()=>setShow(!show)}/> : <EyeClosed onClick={()=>setShow(!show)}/>}
+                            </div>
+                            
+                        </div>
+                    </div>
 
-            <form onSubmit={handleSubmit}> 
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    ref={userRef}
-                    value={user}
-                    onChange={handleUserInput}
-                    autoComplete="off"
-                    required
-                />
+                    
+                    {number > 0 && <p className="text-white">{WhoReU(number)}</p>}
+                    <button className='bg-white text-black hover:bg-blue-500 mt-3.5'>log In</button>
 
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password" //doesn't show it 
-                    id="password"
-                    onChange={handlePwdInput}
-                    value={pwd}
-                    required
-                />
-                <button>log In</button>
-
-                <label htmlFor="persist" className="form__persist">
-                    <input
-                        type="checkbox"
-                        className="form__checkbox"
-                        id="persist"
-                        onChange={handleToggle}
-                        checked={persist}
-                    />
-                    remember
-                </label>
-            </form>
-            <p><Link to="/registor"> sign in </Link></p>
-        </section>
+                </form>
+            </section>        
+        </div>
+        
     )
 
     return content

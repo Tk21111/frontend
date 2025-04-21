@@ -1,32 +1,46 @@
 import {useSelector} from 'react-redux'
 import { selectCurrentUser } from './authSlice'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import useRoleCheck from '../users/role'
+import { useGetOMutation } from '../users/usersApiSlice'
 
 const Welcome = () => {
     const user = useSelector(selectCurrentUser)
+
+    const navigate = useNavigate();
+
+    const [getNum , {data , isLoading}] = useGetOMutation()
 
     const welcome = user? `Welcome ${user}` : 'Welcome!'
     const isAdmin = useRoleCheck('Admin');
     const isEditor = useRoleCheck('Editor');
 
-    console.log(isEditor)
-    console.log(isAdmin)
+    useEffect(()=> {
+
+        if(!data){
+            const fetch  = async()=>{
+                const result = await getNum()
+
+                console.log(result)
+                if(result.data){
+                    navigate('/user')
+                } else {
+                    navigate('/usergetnum')
+                }
+            }
+            fetch();
+        }
+
+    }, [])
 
     const content = (
         <section className="welcome">
             <h1>{welcome}</h1>
-            {(!isAdmin && !isEditor) ? (
-                <>
-                    <p><Link to="/user">Your random number</Link></p>
-               
-                    <p style={{ color: 'red' }}>/\ click here /\</p>
-                </>
-            ) : null}
             
+            <p><Link to="/usergetnum">Go get your number</Link></p>
             <h2> After เฉลย </h2>
             {isEditor ? 
             <>
