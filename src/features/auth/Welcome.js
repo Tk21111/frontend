@@ -18,23 +18,25 @@ const Welcome = () => {
     const isAdmin = useRoleCheck('Admin');
     const isEditor = useRoleCheck('Editor');
 
-    useEffect(()=> {
+    useEffect(() => {
+        if (!data) {
+            const fetch = async () => {
+                const result = await getNum();
 
-        if(!data){
-            const fetch  = async()=>{
-                const result = await getNum()
-
-                console.log(result)
-                if(result.data){
-                    navigate('/user')
-                } else {
-                    navigate('/usergetnum')
+                if (isAdmin && isEditor) {
+                    return null;
                 }
-            }
+
+                if (result.data) {
+                    navigate('/user');
+                } else {
+                    navigate('/usergetnum');
+                }
+            };
             fetch();
         }
+    }, []);
 
-    }, [])
 
     const content = (
         <section className="welcome">

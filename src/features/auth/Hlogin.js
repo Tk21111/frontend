@@ -21,11 +21,8 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [login, { isLoading }] = useLoginMutation()
+    const [login, { data , isLoading , isSuccess }] = useLoginMutation()
     
-
-
-    console.log(number)
     useEffect(() => {
         setErrMsg('')
     }, [number])
@@ -46,8 +43,11 @@ const Login = () => {
       
             //diffrent the ...userData is a accessToken
             dispatch(setCredentials({ ...userData, roles : decode.userinfo.roles }))
+
+            const timeout = setTimeout( () => { 
+                navigate('/welcome')
+            },2000)
             
-            navigate('/welcome')
         } catch (err) {
             console.error(err)
             if (!err?.status) {
@@ -67,10 +67,12 @@ const Login = () => {
     }
 
 
-    const content = isLoading ? <h1>Loading...</h1> : (
+    const content =  (
         <div className="login flex flex-col justify-baselines mt-[10%] align-middle w-full">
+            {!isSuccess ?  (
             <section className='flex flex-col items-center justify-center'>
             
+                {isLoading ? <h1>Loading...</h1> : null }
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> 
 
                 <h1 className='text-3xl font-bold'>Login</h1>
@@ -108,7 +110,13 @@ const Login = () => {
                     <button className='bg-white text-black hover:bg-blue-500 mt-3.5'>log In</button>
 
                 </form>
-            </section>        
+            </section>) : (
+                <div>
+                    <p className="animate-fade text-center font-bold">Welcome</p>
+                    <p className="animate-fade text-center font-bold">{data.user}</p>
+                </div>
+            )
+            }        
         </div>
         
     )

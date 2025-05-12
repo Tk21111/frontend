@@ -18,8 +18,16 @@ const UserO = () => {
     const [fetched , setFetched] = useState(false)
 
     const [isVisible, setIsVisible] = useState(false);
+    const [loadPage , setLoadPage] = useState(false)
 
-    console.log(number)
+    useEffect(()=> {
+        const timeout = setTimeout(()=>{
+            setLoadPage(true);
+        } , 100)
+    },[])
+
+    const userName = useSelector(selectCurrentUser)
+
     const fetchData = async () => {
         try {
               
@@ -34,6 +42,8 @@ const UserO = () => {
             console.error('Error fetching data:', error);
         }
     };
+
+
 
         
    
@@ -67,8 +77,8 @@ const UserO = () => {
     } else {
         content = (
             <>
-                <section className='login flex flex-col justify-start mt-[10%] align-middle text-center'>
-                    
+                <section className={`login flex flex-col justify-start mt-[10%] align-middle text-center duration-500 ease-in ${loadPage ? "opacity-100" : "opacity-0"}`}>
+                    <div className='justify-end text-2xl text-end mb-[5%]'>{userName}</div>
                     <h2>u have to give toooooo!!!</h2>
                     {users ? <div className='transition-all duration-200 ease-in-out'>
                         <h2 >{`No. : ${number}`}</h2>
