@@ -43,11 +43,10 @@ const Welcome = () => {
             <h1>{welcome}</h1>
             
             <p><Link to="/usergetnum">Go get your number</Link></p>
-            <h2> After เฉลย </h2>
             {isEditor ? 
             <>
                 <p><Link to="/userslist">Go to the Users List</Link></p>
-                <p><Link to="/usergetwho"> Who is your buddy???? </Link></p>
+               
             </> : 
             <p style={{color : 'red'}}> not now</p>
         }

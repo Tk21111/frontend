@@ -10,15 +10,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }),
         getO: builder.mutation({ //username didn't get use the func intent is not working
             query: () => ({
-                url: '/randnum',
+                url: '/randnum/get',
                 method: 'GET',
                 credential: 'include',
                 
             }),
         }),
-        GetRandnum : builder.mutation({
+        SetRanNum : builder.mutation({
             query: () => ({ //same
-                url: '/randnum/get',
+                url: '/randnum/set',
                 method: 'GET',
                 credential : 'include'
             }),
@@ -54,4 +54,4 @@ export const userApiSlice = apiSlice.injectEndpoints({
     })
 });
 
-export const { useGetUsersQuery, useGetOMutation , useGetRandnumMutation , useGetWhoMutation ,useCheckDullMutation , useAdminGiveMutation , useAdminResetMutation} = userApiSlice;
+export const { useGetUsersQuery, useGetOMutation , useSetRanNumMutation , useGetWhoMutation ,useCheckDullMutation , useAdminGiveMutation , useAdminResetMutation} = userApiSlice;

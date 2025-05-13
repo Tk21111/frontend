@@ -40,11 +40,11 @@ const UsersList = () => {
 
         if (search !== null && search !== '') {
             const searchNumber = parseInt(search, 10);
-            contentList = users.filter((obj) => obj['no'] === searchNumber);
+            contentList = users.filter((obj) => obj['no'] === searchNumber || obj['randnum'] === searchNumber);
         }
 
         content = (
-            <section className="flex flex-col justify-center align-middle text-center mt-[2%] w ">
+            <div className="flex flex-col justify-center align-middle text-center mt-[2%] ">
                 <h1>Users List</h1>
                 <Link to="/welcome">Back to Welcome</Link>
                 <input 
@@ -53,21 +53,24 @@ const UsersList = () => {
                     id="search"
                     placeholder="Search..."
                     type="number"
-                    className='text-black'
+                    className='text-black my-[5%]'
                 />
-                <ul>
+                <div className='grid grid-cols-1 sm:grid-cols-5 gap-2 '>
                     {contentList.map((user, i) => (
-                        <li key={i} className='flex h-30 min-w-full'>
-                            <div className="llo">
-                                <p>username: {user.username}</p>
-                                <p>Name: {WhoReU(user.no)}</p>
-                                <p>randomnumber: {user.randnum}</p>
-                                <p>Give to: {WhoReU(user.randnum)}</p>
+                        <li key={i} className='flex justify-center h-30 min-w-full rounded-sm border-2 m-1'>
+                            <div className="text-center ">
+                                <p>user: {user.username}</p>
+                                <p>Name: {WhoReU(user.no)?.split(" ")[0]}</p>
+                                <p>No: {user.no}</p>
+                                <div className='flex flex-row justify-around '>
+                                    <p>Get : {WhoReU(user.get)?.split(" ")[0]}</p>
+                                    <p>Give : {WhoReU(user.randnum)?.split(" ")[0]}</p>
+                                </div>
                             </div>
                         </li>
                     ))}
-                </ul>
-            </section>
+                </div>
+            </div>
         );
     } else if (isError) {
         const errorMsg = error.originalStatus === 401 

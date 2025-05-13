@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 import { useNavigate , Link } from 'react-router-dom'
 
-import { useDispatch } from 'react-redux'
-import { setCredentials } from './authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectCurrentToken, setCredentials } from './authSlice'
 import { useLoginMutation } from './authApiSlice'
 import usePersist from '../../hooks/usePersist'
 import { jwtDecode } from 'jwt-decode'
@@ -22,7 +22,7 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const [login, { data , isLoading , isSuccess }] = useLoginMutation()
-    
+
     useEffect(() => {
         setErrMsg('')
     }, [number])
@@ -68,7 +68,7 @@ const Login = () => {
 
 
     const content =  (
-        <div className="login flex flex-col justify-baselines mt-[10%] align-middle w-full">
+        <div className="flex flex-col justify-baselines mt-[20%] p-3 align-middle">
             {!isSuccess ?  (
             <section className='flex flex-col items-center justify-center'>
             
@@ -112,8 +112,8 @@ const Login = () => {
                 </form>
             </section>) : (
                 <div>
-                    <p className="animate-fade text-center font-bold">Welcome</p>
-                    <p className="animate-fade text-center font-bold">{data.user}</p>
+                    <p className="animate-fade text-center font-bold text-xl">Welcome</p>
+                    <p className="animate-fade text-center font-bold text-3xl">{data.user}</p>
                 </div>
             )
             }        

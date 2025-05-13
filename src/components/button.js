@@ -9,7 +9,7 @@ function generateRandomString(length) {
   return result;
 }
 
-function ButtonRanNum({ id, onClick, destroy }) {
+function ButtonRanNum({ id, func, destroy }) {
   const [disabled, setDisabled] = useState(false);
   const [randomString, setRandomString] = useState('');
   const [showCursor, setShowCursor] = useState(true);
@@ -21,7 +21,7 @@ function ButtonRanNum({ id, onClick, destroy }) {
       clearTimeout(typingRef.current);
     }
     
-    const newRandomString = generateRandomString(12);
+    const newRandomString = generateRandomString(6);
     let displayedText = '';
     
     const typeChar = (index) => {
@@ -63,15 +63,13 @@ function ButtonRanNum({ id, onClick, destroy }) {
   }, []);
 
   const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
+      func();
   };
 
   return (
     <button
       key={id}
-      className="selectChild border-2 border-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 p-2 rounded"
+      className="border-2 border-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 p-2 rounded h-full w-full"
       onClick={handleClick}
       disabled={disabled}
     >

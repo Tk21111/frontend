@@ -30,14 +30,12 @@ const PersistLogin = () => {
         if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
             const verifyRefreshToken = async () => {
 
-                console.log('sent')
                 try {
                     //why writing when i already
 
                     const refreshToken = localStorage.getItem("refreshToken");
-                    console.log(refreshToken)
                     const response = await refresh({ refreshToken }).unwrap();
-                    console.log(response)
+
                     const  accessToken  = response.accessToken
                     const decoded = jwtDecode(accessToken);
 
