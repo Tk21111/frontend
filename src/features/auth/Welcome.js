@@ -21,17 +21,23 @@ const Welcome = () => {
     useEffect(() => {
         if (!data) {
             const fetch = async () => {
-                const result = await getNum();
+                
 
-                if (isAdmin && isEditor) {
-                    return null;
-                }
+                try {
+                    const result = await getNum();
 
-                if (result.data) {
-                    navigate('/user');
-                } else {
-                    navigate('/usergetnum');
+                    if ( isAdmin || isEditor || result.error.status === 405) {
+                        return null;
+                    } else if (result.data) {
+                        navigate('/user');
+                    } else {
+                        navigate('/usergetnum');
+                    }
+                } catch(err){
+                    
+                    console.log(err)
                 }
+                
             };
             fetch();
         }

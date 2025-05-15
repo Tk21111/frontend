@@ -16,7 +16,7 @@ const authSlice = createSlice({
             if (accessToken){
                 state.token = accessToken
             }
-            if (roles){
+            if (roles){       
                 state.roles = roles
             }
             if(no){
@@ -28,7 +28,7 @@ const authSlice = createSlice({
             state.user = null
             state.token = null
             state.roles = null
-             state.no = null
+            state.no = null
         }
     },
 })
