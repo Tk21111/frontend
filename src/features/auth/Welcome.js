@@ -21,11 +21,8 @@ const Welcome = () => {
     useEffect(() => {
         if (!data) {
             const fetch = async () => {
-                
-
                 try {
                     const result = await getNum();
-
                     if ( isAdmin || isEditor || result.error.status === 405) {
                         return null;
                     } else if (result.data) {
@@ -34,7 +31,6 @@ const Welcome = () => {
                         navigate('/usergetnum');
                     }
                 } catch(err){
-                    
                     console.log(err)
                 }
                 

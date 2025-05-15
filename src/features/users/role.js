@@ -13,7 +13,6 @@ const useRoleCheck = (check) => {
             return false;
         }
     }
-
     return false;
 };
 
