@@ -68,7 +68,7 @@ const Login = () => {
 
 
     const content =  (
-        <div className="flex flex-col justify-baselines mt-[20%] p-3 align-middle">
+        <div className="flex flex-col sm:justify-center sm:mt-0 justify-self-start mt-[20%] p-3 align-middle">
             {!isSuccess ?  (
             <section className='flex flex-col items-center justify-center'>
             
